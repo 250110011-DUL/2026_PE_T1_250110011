@@ -5,4 +5,4 @@ Incluye:
 - Datos cuantitativos continuos
 - Datos cualitativos
 
-Se usaron al menos 100 datos.
+Se usaron al menos 100 datos simulados.
