@@ -1,20 +1,278 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Mi página de estadística</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Grid | Sistema de Monitoreo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* NUEVA IDENTIDAD VISUAL - DARK MODE & NEON */
+        :root {
+            --accent: #ccff00; /* Amarillo Neón */
+            --bg-dark: #0f1115; /* Fondo casi negro */
+            --card-bg: #1a1d23; /* Fondo de tarjetas */
+            --text-main: #e0e0e0;
+            --text-muted: #94a3b8;
+            --border: #2d333f;
+            --success: #00ff88;
+            --warning: #ffb700;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Navegación Futurista */
+        nav {
+            background: rgba(15, 17, 21, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover { 
+            color: var(--accent); 
+            text-shadow: 0 0 8px var(--accent);
+        }
+
+        /* Header con Estilo de Terminal */
+        header {
+            padding: 80px 20px;
+            text-align: center;
+            background: radial-gradient(circle at center, #1a1d23 0%, #0f1115 100%);
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 { 
+            margin: 0; 
+            font-size: 3rem; 
+            color: var(--accent);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        header p { 
+            color: var(--text-muted); 
+            margin-top: 15px; 
+            max-width: 600px; 
+            margin-left: auto; 
+            margin-right: auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Tarjetas de Vidrio Oscuro */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+        }
+
+        /* Badges Minimalistas */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border: 1px solid currentColor;
+        }
+
+        .badge-discreta { color: var(--accent); }
+        .badge-continua { color: var(--success); }
+        .badge-cualitativa { color: var(--warning); }
+
+        h2 { 
+            margin-top: 0; 
+            font-size: 1.5rem; 
+            border-left: 4px solid var(--accent); 
+            padding-left: 15px;
+        }
+
+        /* Data Viewer tipo Código Real */
+        .data-viewer {
+            background: #000;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .data-viewer::before {
+            content: "SYSTEM_CONSOLE";
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-size: 10px;
+            color: var(--border);
+        }
+
+        .raw-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #00ff88;
+            line-height: 1.5;
+        }
+
+        /* Tabla Estilo Matrix */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--accent);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        tr:last-child td { 
+            border-bottom: none; 
+            color: var(--accent); 
+            font-weight: bold;
+        }
+
+        tr:hover td { 
+            background: rgba(204, 255, 0, 0.03); 
+            color: white;
+        }
+
+        .footer { 
+            text-align: center; 
+            padding: 60px; 
+            color: var(--border); 
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+    </style>
 </head>
 <body>
 
-<h1>Ejemplos de datos</h1>
+    <nav>
+        <a href="#proposito">Core</a>
+        <a href="#metricas">Metrics</a>
+        <a href="#registros">Console</a>
+    </nav>
 
-<h2>Datos cuantitativos discretos</h2>
-<p>Número de hermanos de los estudiantes.</p>
+    <header>
+        <h1>SmartGrid_OS</h1>
+        <p>Infraestructura crítica: Monitoreo de flujo de energía cuántica y eficiencia de red metropolitana.</p>
+    </header>
 
-<h2>Datos cuantitativos continuos</h2>
-<p>Estatura de los estudiantes en metros.</p>
+    <div class="container">
+        
+        <section id="proposito" class="card">
+            <span class="badge badge-cualitativa">TYPE: LOGISTIC</span>
+            <h2>Estado Operativo</h2>
+            <p>Sincronización de nodos activos para la gestión de carga variable. El sistema actual opera bajo protocolos de baja latencia para maximizar la distribución en sectores de alta demanda industrial.</p>
+        </section>
 
-<h2>Datos cualitativos</h2>
-<p>Color favorito de los estudiantes.</p>
+        <section id="metricas" class="card">
+            <span class="badge badge-continua">DATA: FLOW_RATE</span>
+            <h2>Rendimiento Global</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>NODO_ID</th>
+                        <th>OUTPUT (MW)</th>
+                        <th>UPTIME</th>
+                        <th>LATENCY</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>PX-900</td>
+                        <td>450.22</td>
+                        <td>99.9%</td>
+                        <td>2ms</td>
+                    </tr>
+                    <tr>
+                        <td>PX-901</td>
+                        <td>812.05</td>
+                        <td>98.4%</td>
+                        <td>5ms</td>
+                    </tr>
+                    <tr>
+                        <td>PX-902</td>
+                        <td>125.40</td>
+                        <td>100%</td>
+                        <td>1ms</td>
+                    </tr>
+                    <tr>
+                        <td>TOTAL_NET</td>
+                        <td>1387.67</td>
+                        <td>AVG: 99.4%</td>
+                        <td>---</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="registros" class="card">
+            <span class="badge badge-discreta">LOG: EVENT_BUS</span>
+            <h2>Consola de Depuración</h2>
+            <div class="data-viewer">
+                <div class="raw-text">
+                    > Initializing grid_controller... [OK]<br>
+                    > Fetching node_data from Sector_7... [DONE]<br>
+                    > WARNING: High load detected in PX-901<br>
+                    > Routing emergency power... [SUCCESS]<br>
+                    > All systems nominal.
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="footer">
+        TERMINAL SYSTEM v4.0.2 // 2026
+    </div>
 
 </body>
 </html>
